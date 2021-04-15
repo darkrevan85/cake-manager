@@ -1,5 +1,16 @@
-language: java
-jdk:
-  - openjdk11
 script:
   - ./mvnw clean install
+
+    services:
+      #Linking Travis CI and Docker
+      - docker
+    before_install:
+      - mvn clean
+      - echo "$DOCKER_PASSWORD" | docker login  -u "$DOCKER_USERNAME" --password-stdin
+      - docker pull openjdk11
+    script:
+      #We avoid this error :" the job exceeded the maximum log length and has been terminated "
+      - cp .travis.settings.xml $HOME/.m2/settings.xml
+      - cat $HOME/.m2/settings.xml
+      #deploying the app on Docker
+      - mvn deploy
