@@ -5,6 +5,7 @@ import com.waracle.cakemanager.model.CakeEntity;
 import com.waracle.cakemanager.model.CakeRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
@@ -22,6 +23,9 @@ To initialize the application db after the spring context has been loaded
 @Component
 public class EventListenerBean {
 
+    @Value( "${url.init}" )
+    private String initUrl;
+
 
     @Autowired
     RestTemplate restTemplate;
@@ -38,11 +42,9 @@ public class EventListenerBean {
                 MediaType.TEXT_PLAIN));
         restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter);
 
-        String url = "https://gist.githubusercontent.com/hart88/198f29ec5114a3ec3460/raw/8dd19a88f9b8d24c23d9960f3300d0c917a4f07c/cake.json";
-
 
         ResponseEntity<CakeEntity[]> responseEntity =
-                restTemplate.getForEntity(url, CakeEntity[].class);
+                restTemplate.getForEntity(initUrl, CakeEntity[].class);
 
 
         Arrays.stream(responseEntity.getBody()).forEach(

@@ -30,9 +30,6 @@ public class CakeController {
     @Autowired
     ObjectMapper objectMapper;
 
-
-    //curl -d         "{\"title\":\"Fabbb Lemon cheesecake\",\"description\":\"empty\",\"image\":\"https://s3-eu-west-1.amazonaws.com/s3.mediafileserver.co.uk/carnation/WebFiles/RecipeImages/lemoncheesecake_lg.jpg\"}" -H "Content-Type: application/json" http://localhost:8080/createCake
-
     @PostMapping(
             value = "/cakes", consumes = "application/json", produces = "application/json")
     public ResponseEntity<CakeEntity> createCake(@RequestBody CakeEntity cake) {
@@ -44,7 +41,7 @@ public class CakeController {
     }
 
     @GetMapping("/cakes")
-    public ResponseEntity<List<CakeEntity>> cake() {
+    public ResponseEntity<List<CakeEntity>> cakes() {
 
         return new ResponseEntity<>(cakeService.findAll(),HttpStatus.OK);
 
@@ -59,12 +56,15 @@ public class CakeController {
             try {
                 return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(it);
             } catch (JsonProcessingException e) {
-                e.printStackTrace();
+                logger.error("error in getting human readable cakes",e);
                 return "";
             }
         })
                 .collect(Collectors.joining(""));
 
+
+        //via curl (and test profile) this is easily readable
+        // curl http://localhost:8080
         return new ResponseEntity<>(cakeEntitiesHumanReadable,HttpStatus.OK);
 
 
