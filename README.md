@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/darkrevan85/cake-manager.svg?branch=master)](https://travis-ci.com/darkrevan85/cake-manager)
-https://img.shields.io/docker/build/darkrevan85/cake-manager
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/darkrevan85/cake-manager)
 
 Run the app with Docker:
 
